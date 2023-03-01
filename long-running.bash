@@ -91,19 +91,11 @@ function notify_when_long_running_commands_finish_install() {
                         icon=dialog-error
                         urgency=normal
                     fi
-                    notify=$(command -v notify-send)
-                    if [ -x "$notify" ]; then
-                        $notify \
-                        -i $icon \
-                        -u $urgency \
-                        "Command completed in $time_taken_human" \
-                        "$__udm_last_command"
-                        if [[ "$UDM_PLAY_SOUND" != 0 ]]; then
-                            paplay /usr/share/sounds/freedesktop/stereo/complete.oga
-                        fi
-                    else
-                        echo -ne "\a"
-                    fi
+                    echo -ne '\033[22;0t'
+                    powershell.exe New-BurntToastNotification \
+                      -AppLogo "\"C:\Users\Franco\Desktop\wsl-data\kitty.ico\"" \
+                      -Text "\"Command completed!\"","\"'$__udm_last_command' took $time_taken_human\""
+                    echo -ne '\033[23;0t'
                 fi
                 if [[ -n $LONG_RUNNING_COMMAND_CUSTOM_TIMEOUT ]] &&
                     [[ -n $LONG_RUNNING_COMMAND_CUSTOM ]] &&
